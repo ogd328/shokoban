@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Example LaunchAgent that keeps the Shokoban GUI running on macOS.
+  Replace every /ABSOLUTE/PATH/... below, then:
+    cp shokoban-gui.example.plist ~/Library/LaunchAgents/local.shokoban.gui.plist
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/local.shokoban.gui.plist
+  The GUI listens on 127.0.0.1 only. Expose it to other machines only if you
+  understand the risk (it shows unmasked customer text).
+-->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>local.shokoban.gui</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+		<key>SHOKOBAN_WORK_DIR</key>
+		<string>/ABSOLUTE/PATH/TO/shokoban-data</string>
+		<key>SHOKOBAN_DATA_MODE</key>
+		<string>real</string>
+		<key>SHOKOBAN_REVIEW_REAL</key>
+		<string>1</string>
+		<!-- Empty = reader off (nothing leaves this machine). Other values: local, claude, fake -->
+		<key>SHOKOBAN_CLOUD_READER</key>
+		<string></string>
+	</dict>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/ABSOLUTE/PATH/TO/shokoban/.venv/bin/streamlit</string>
+		<string>run</string>
+		<string>gui/shokoban_mac.py</string>
+		<string>--server.address</string>
+		<string>127.0.0.1</string>
+		<string>--server.port</string>
+		<string>8501</string>
+		<string>--server.headless</string>
+		<string>true</string>
+		<string>--browser.gatherUsageStats</string>
+		<string>false</string>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>/ABSOLUTE/PATH/TO/shokoban</string>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<true/>
+	<key>ThrottleInterval</key>
+	<integer>30</integer>
+	<key>StandardOutPath</key>
+	<string>/ABSOLUTE/PATH/TO/shokoban-data/logs/gui.log</string>
+	<key>StandardErrorPath</key>
+	<string>/ABSOLUTE/PATH/TO/shokoban-data/logs/gui.log</string>
+</dict>
+</plist>

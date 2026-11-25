@@ -1,0 +1,11 @@
+{
+  "port": 1234,
+  "ctx": 8192,
+  "idle_minutes": 15,
+  "min_free_percent": 20,
+  "default_model": "gemma-4-12b-ja",
+  "models": {
+    "gemma-4-12b-ja": "/absolute/path/to/your-gemma-4-12b-japanese.gguf"
+  },
+  "state_dir": "/absolute/path/to/shokoban-data/llm-state"
+}

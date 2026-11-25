@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Example LaunchAgent that stops the local LLM (llama-server) when Shokoban has
+  not used it for "idle_minutes" (see runtime.json). It runs once a minute and
+  only stops a llama-server that Shokoban itself started.
+  Without this (or an equivalent cron job), llama-server keeps running until you
+  press the stop button on the "手元AI" screen.
+  Replace every /ABSOLUTE/PATH/... below, then:
+    cp shokoban-llm-idle-stop.example.plist ~/Library/LaunchAgents/local.shokoban.llm-idle-stop.plist
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/local.shokoban.llm-idle-stop.plist
+-->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>local.shokoban.llm-idle-stop</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/ABSOLUTE/PATH/TO/shokoban/.venv/bin/python</string>
+		<string>scripts/llm_idle_stop.py</string>
+		<string>--config</string>
+		<string>/ABSOLUTE/PATH/TO/shokoban-data/runtime.json</string>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>/ABSOLUTE/PATH/TO/shokoban</string>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StartInterval</key>
+	<integer>60</integer>
+	<key>StandardOutPath</key>
+	<string>/ABSOLUTE/PATH/TO/shokoban-data/logs/llm-idle-stop.log</string>
+	<key>StandardErrorPath</key>
+	<string>/ABSOLUTE/PATH/TO/shokoban-data/logs/llm-idle-stop.log</string>
+</dict>
+</plist>
